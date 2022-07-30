@@ -1,8 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:tusmap_flutter/resources/location.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:webview_flutter/webview_flutter.dart';
+import 'package:tusmap_flutter/resources/location.dart';
 // ignore: library_prefixes
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
@@ -15,7 +14,6 @@ class Main extends StatefulWidget {
 
 class _MainState extends State<Main> {
   String? url;
-  Set<JavascriptChannel>? channel;
   WebViewController? controller;
 
   String? socketId;
@@ -55,9 +53,41 @@ class _MainState extends State<Main> {
     });
   }
 
+  void _showAlert({required String title, required String message}) {
+    showCupertinoDialog(
+      context: context, builder: (context) {
+        return CupertinoAlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: [
+            CupertinoDialogAction(
+              isDefaultAction: true,
+              child: Text('확인'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ]
+        );
+      }
+    );
+  }
+
+  JavascriptChannel _webAlertToApp(BuildContext context) {
+    return JavascriptChannel(
+      name: 'appAlert',
+      onMessageReceived: (JavascriptMessage message) {
+        print(message.message);
+        _showAlert(
+          title: message.message.split('/')[0],
+          message: message.message.split('/')[1]
+        );
+      }
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-
     return Stack(
       children: [
         url != null ? WebView(
@@ -65,7 +95,9 @@ class _MainState extends State<Main> {
           onWebViewCreated: (controller) {
             this.controller = controller;
           },
-          javascriptChannels: channel,
+          javascriptChannels: <JavascriptChannel>{
+            _webAlertToApp(context),
+          },
           javascriptMode: JavascriptMode.unrestricted,
           onPageFinished: (data) {
             setPosition();
@@ -91,11 +123,13 @@ class _MainState extends State<Main> {
           child: ClipRRect(
             borderRadius: BorderRadius.all(Radius.circular(50)),
             child: Container(
-              margin: EdgeInsets.all(10),
-              child: FloatingActionButton(
+              margin: EdgeInsets.all(15),
+              child: CupertinoButton(
                 onPressed: () {setPosition();},
-                child: Icon(Icons.location_searching),
-              ),
+                padding: EdgeInsets.all(10),
+                color: Color(0xffaaaaaa),
+                child: Icon(CupertinoIcons.location_fill),
+              )
             ),
           )
         )

@@ -38,6 +38,7 @@ dependencies:
   webview_flutter: ^3.0.4
   socket_io_client: ^2.0.0
   geolocator: ^9.0.1
+  floating_bottom_navigation_bar: ^1.5.2
 
 dev_dependencies:
   flutter_test:

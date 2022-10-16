@@ -15,13 +15,11 @@ class Main extends StatefulWidget {
 class _MainState extends State<Main> {
   String? url;
   WebViewController? controller;
+  Uri backUrl = 'http://192.168.0.199:3000' as Uri;
 
   String? socketId;
 
-  IO.Socket socket = IO.io('http://192.168.0.145:3000/', <String, dynamic>{
-    'transports': ['websocket'],
-    'autoConnect': false,
-  });
+  late IO.Socket socket;
 
   void emit(String room, dynamic data) {
     socket.emit(room, {
@@ -33,11 +31,17 @@ class _MainState extends State<Main> {
   @override
   void initState() {
     super.initState();
+
+    socket = IO.io(backUrl, <String, dynamic>{
+      'transports': ['websocket'],
+      'autoConnect': false,
+    });
+
     socket.on('setPosition', (data) => print(data));
     socket.connect();
     socket.onConnect((data) {
       setState(() {
-        url = 'http://192.168.0.145:3000/?id=${socket.id}';
+        url = 'http://192.168.0.199:3000/?id=${socket.id}';
         socketId = '${socket.id}tusMap';
       });
       print(socket.id);

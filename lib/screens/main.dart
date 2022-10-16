@@ -15,7 +15,7 @@ class Main extends StatefulWidget {
 class _MainState extends State<Main> {
   String? url;
   WebViewController? controller;
-  Uri backUrl = 'http://192.168.0.199:3000' as Uri;
+  String backUrl = 'http://192.168.0.199:3000';
 
   String? socketId;
 
@@ -36,12 +36,18 @@ class _MainState extends State<Main> {
       'transports': ['websocket'],
       'autoConnect': false,
     });
+    if (socket.connected) {
+      setState(() {
+        url = backUrl;
+        socketId = '${socket.id}tusMap';
+      });
+    }
 
     socket.on('setPosition', (data) => print(data));
     socket.connect();
     socket.onConnect((data) {
       setState(() {
-        url = '$backUrl/?id=${socket.id}';
+        url = backUrl;
         socketId = '${socket.id}tusMap';
       });
       print(socket.id);

@@ -41,7 +41,7 @@ class _MainState extends State<Main> {
     socket.connect();
     socket.onConnect((data) {
       setState(() {
-        url = 'http://192.168.0.199:3000/?id=${socket.id}';
+        url = '$backUrl/?id=${socket.id}';
         socketId = '${socket.id}tusMap';
       });
       print(socket.id);

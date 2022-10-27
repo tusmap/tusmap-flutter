@@ -15,7 +15,7 @@ class Main extends StatefulWidget {
 class _MainState extends State<Main> {
   String? url;
   WebViewController? controller;
-  String backUrl = 'http://192.168.0.199:3000';
+  String backUrl = 'https://port-0-tusmap-backend-3q0b1b25l9gzhka1.gksl2.cloudtype.app';
 
   String? socketId;
 
@@ -38,7 +38,8 @@ class _MainState extends State<Main> {
     });
     if (socket.connected) {
       setState(() {
-        url = backUrl;
+        url = 'https://web-tusmap-frontend-3q0b1b25l9h1lqpy.gksl2.cloudtype.app?id=${socket.id}';
+        // url = 'http://192.168.0.199:5173?id=${socket.id}';
         socketId = '${socket.id}tusMap';
       });
     }
@@ -47,7 +48,8 @@ class _MainState extends State<Main> {
     socket.connect();
     socket.onConnect((data) {
       setState(() {
-        url = backUrl;
+        url = 'https://web-tusmap-frontend-3q0b1b25l9h1lqpy.gksl2.cloudtype.app?id=${socket.id}';
+        // url = 'http://192.168.0.199:5173?id=${socket.id}';
         socketId = '${socket.id}tusMap';
       });
       print(socket.id);
@@ -128,12 +130,12 @@ class _MainState extends State<Main> {
             ],
           )
         ),
-        Align(
+        url != null ? Align(
           alignment: Alignment.bottomRight,
           child: ClipRRect(
             borderRadius: BorderRadius.all(Radius.circular(50)),
             child: Container(
-              margin: EdgeInsets.all(15),
+              margin: EdgeInsets.fromLTRB(15, 15, 15, 100),
               child: CupertinoButton(
                 onPressed: () {setPosition();},
                 padding: EdgeInsets.all(10),
@@ -142,7 +144,7 @@ class _MainState extends State<Main> {
               )
             ),
           )
-        )
+        ) : SizedBox()
       ]
     );
   }

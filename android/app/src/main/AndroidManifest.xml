@@ -2,8 +2,9 @@
     package="com.example.tusmap_flutter">
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET"/>
    <application
-        android:label="tusmap_flutter"
+        android:label="TUS 맵"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="true">
